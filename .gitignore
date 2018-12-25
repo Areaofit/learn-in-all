@@ -1,0 +1,17 @@
+# learn-in-all
+.idea
+*.iml
+
+# java-learn
+java-learn/java-learn.iml
+java-learn/target
+
+# netty-learn
+netty-learn/netty-learn.iml
+netty-learn/target
+
+# web-learn
+web-learn/web-learn.iml
+web-learn/target
+
+
