@@ -1,4 +1,4 @@
-package com.areaofit;
+package com.areaofit.learn;
 
 /**
  * Hello world!
