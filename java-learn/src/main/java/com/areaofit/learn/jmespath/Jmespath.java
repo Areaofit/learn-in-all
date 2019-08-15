@@ -24,9 +24,12 @@ public class Jmespath {
             "\"data\": {\"averageMileage\":data.averageMileage,\"fuelPercent\":data.fuelPercent," +
             "\"economizeFuel\":calculate(to_number(data.economizeFuel), `\"mul\"`, judge(substring(`\"LWSRCB5K6KA000141\"`,`6`,`8`)==`\"G2\"`, `1.23`, `4.56`))}}";
 
-    public static String MODEL_DATA_2 = "{\"vin\":\"LWSRCB5K6KA000141\",\"status\": {\"code\": `\"0\"`,\"description\": `\"ok\"`}," +
-            "\"data\": data.{\"averageMileage\":averageMileage,\"fuelPercent\":fuelPercent," +
-            "\"vin\":`\"$(vin)\"`}}";
+    public static String MODEL_DATA_2 = "{\"status\": {\"code\": `\"0\"`,\"description\": `\"ok\"`}," +
+            "\"data\": {\"averageMileage\": data.averageMileage,\"fuelPercent\": data.fuelPercent," +
+            "\"weekMileage\": data.weekMileage,\"percent_displace\": data.percent_displace," +
+            "\"economizeFuel\": data.economizeFuel,\"weekFuel\": calculate(to_number(data.weekFuel), `\"mul\"`, judge(substring(`\"LWSRCB5K6KA000141\"`,`6`,`8`)==`\"G2\"`, `0.46398`, `0.43903`))," +
+            "\"averageFuel\": calculate(to_number(data.averageFuel), `\"mul\"`, judge(substring(`\"LWSRCB5K6KA000141\"`,`6`,`8`)==`\"G2\"`, `0.46398`, `0.43903`))," +
+            "\"percent_mile\": data.percent_mile,\"mile_save\": data.mile_save,\"carbonDisplacement\": data.carbonDisplacement}}";
 
     public static void main(String[] args) throws Exception{
         Jmespath jmespath = new Jmespath();
@@ -42,7 +45,7 @@ public class Jmespath {
         JmesPath<JsonNode> runtime = new JacksonRuntime(configuration);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode p = mapper.readTree(P_DATA);
-        Expression<JsonNode> expression = runtime.compile(MODEL_DATA);
+        Expression<JsonNode> expression = runtime.compile(MODEL_DATA_2);
         JsonNode result = expression.search(p);
         System.out.println(result);
 
