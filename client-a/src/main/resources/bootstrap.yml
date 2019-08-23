@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: msvehiclestatus
+  cloud:
+    config:
+      uri: ${config.server.uri:http://config-server.marathon.mesos:8888}

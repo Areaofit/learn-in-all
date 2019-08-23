@@ -1,0 +1,128 @@
+#
+#
+#rpcUrls:
+#  rpcSettings:
+#    x37:
+#      getstatus:
+#        getStatus:
+#          server: http://bigdata-common-project.uat.pateo.com.cn
+#          path: '/usertravel/v2/last/?vin=$(vin)'
+#          valid_path: type(data.ngtpCreateTime)=='string'
+#          data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": data.{"equipmentID": equipmentID,"ngtpCreateTime": ngtpCreateTime,"nivHuile": nivHuile,"conso": conso,"autonomie": autonomie,"kmTotal": kmTotal,"kmMaint": kmMaint,"nbJourMaintenance": nbJourMaintenance,"dbtype": dbtype,"lon": lon,"lat": lat,"engineState": engineState,"eachMileage": eachMileage,"eachFuel": eachFuel,"address": regeo(lat, lon),"alerts": split(replace(alerts, [[''alertType:alertValue\\||\\d+:'', '''']]),'';''),"rF_TPMS":split(tyreAirPressure,'','')[0], "lF_TPMS":split(tyreAirPressure,'','')[1], "rR_TPMS":split(tyreAirPressure,'','')[2], "lR_TPMS":split(tyreAirPressure,'','')[3] }}'
+#          invalid_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+#          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+#          empty_error: '{"status": {"code": "12016003","description": "该VIN号未查询到车况信息"},"data": null}'
+#        contractValid:
+#          server: http://mscontract.uat.pateo.com.cn
+#          path: '/contract/getContractByVin/$(vin)'
+#          valid_path: data.beginTime < '$(getStatus.data.ngtpCreateTime)' && '$(getStatus.data.ngtpCreateTime)' < data.endTime
+#          invalid_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+#          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+#          empty_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+#        getLastDM:
+#          server: http://msdevice.uat.pateo.com.cn
+#          path: '/device/vehicle/getLastDataMingingInfo/$(vin)/1'
+#          data_path: '{"data": {"nivHuile": nivHuile,"autonomie": autonomie,"kmTotal": kmTotal,"kmMaint": kmMaint,"tyreAirPressure": tyreAirPressure}}'
+#          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+#    gjs11:
+#      getstatus:
+#        getLastStatus:
+#          server: http://bigdata-gj-project.perf.pateo.com.cn #/usertravel/v2/lastvin=LWSRCB5K09A000047
+#          path: '/usertravel/v2/last?vin=$(vin)'
+#          # data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": data}'
+#          data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": data.{"RRTempHigh": RRTempHigh,"frontRight": frontRight,"altitudeMtr": altitudeMtr,"distToEmptyPowerKm": distToEmptyPowerKm,"FRTempHigh": FRTempHigh,"tailgate": tailgate,"type": type,"rearRight": rearRight,"FLTempHigh": FLTempHigh,"VCUBattChrgStatus": VCUBattChrgStatus,"chargingStatus": chargingStatus,"vin": vin,"RLPressureWarning": RLPressureWarning,"FLPressureWarning": FLPressureWarning,"ABS_AbsFlgFlt": ABS_AbsFlgFlt,"longitude": longitude,"stateOfCharge": stateOfCharge,"vehicleSpeed": vehicleSpeed,"odometer": odometer,"SystemErr": SystemErr,"RLTempHigh": RLTempHigh,"FLTireTemp": FLTireTemp,"gnssSpeedKmph": gnssSpeedKmph,"gatherTime": gatherTime,"EPB_Warning_Indication_Request": EPB_Warning_Indication_Request,"RRTireTemp": RRTireTemp,"reportTime": reportTime,"status": status,"rearLeft": rearLeft,"internal": internal,"averageFuelConsumption": averageFuelConsumption,"creationTime": creationTime,"TPMS_LR_Pressure": TPMS_LR_Pressure,"VCUBrkErr": VCUBrkErr,"latitude": latitude,"address": regeo(latitude, longitude),"frontLeft": frontLeft,"VCUPwrBattCutOff": VCUPwrBattCutOff,"odometerValue": odometerValue,"RLTireTemp": RLTireTemp,"EPB_Audible_Warning_Request": EPB_Audible_Warning_Request,"MCUElecMotOverTErr": MCUElecMotOverTErr,"EPS_EpasFailed": EPS_EpasFailed,"FRTireTemp": FRTireTemp,"temperature": temperature,"SystemWarning": SystemWarning,"fixtime": fixtime,"projectID": projectID,"TPMS_LF_Pressure": TPMS_LF_Pressure,"timer1": timer1,"heading": heading,"RRPressureWarning": RRPressureWarning,"TPMS_RR_Pressure": TPMS_RR_Pressure,"EPB_Display_Message_Request": EPB_Display_Message_Request,"FRPressureWarning": FRPressureWarning,"VCUElecMotErr": VCUElecMotErr,"positionId": positionId,"VCUsysOverT": VCUsysOverT,"VCUPwrBattFlt": VCUPwrBattFlt,"BMSInsulationSts": BMSInsulationSts,"TPMS_RF_Pressure": TPMS_RF_Pressure,"keyPosition": keyPosition,"gatherTime_alertinfo": gatherTime_alertinfo}}'
+#          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+#          empty_error: '{"status": {"code": "12016007","description": "查询S11车况数据失败"},"data": null}'
+#      getecodrivng:
+#        getecodrivng:
+#          server: http://bigdata-common-project.bdperf.pateo.com.cn #/ecodriving/getecodrivng?vin=LWSRCB5K09A000047
+#          path: '/ecodriving/getecodrivng?vin=$(vin)'
+#          data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": {"averageMileage": data.averageMileage,"fuelPercent": data.fuelPercent,"weekMileage": data.weekMileage,"percent_displace": data.percent_displace,"economizeFuel": data.economizeFuel,"weekFuel": calculate(to_number(data.weekFuel), `"mul"`, ifelse(substring(`"$(vin)"`,`6`,`8`)==`"G2"`, `0.46398`, `0.43903`)),"averageFuel": calculate(to_number(data.averageFuel), `"mul"`, ifelse(substring(`"$(vin)"`,`6`,`8`)==`"G2"`, `0.46398`, `0.43903`)),"percent_mile": data.percent_mile,"mile_save": data.mile_save,"carbonDisplacement": data.carbonDisplacement}}'
+#          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+#          empty_error: '{"status": {"code": "12016007","description": "查询S11环保驾驶数据失败"},"data": null}'
+#      getdrivercore:
+#        getdrivercore:
+#          server: http://bigdata-gj-project.perf.pateo.com.cn #/usertravel/v2/drivercore?vin=LWSRCB5K09A000047
+#          path: '/usertravel/v2/drivercore?vin=$(vin)'
+#          data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": data}'
+#          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+#          empty_error: '{"status": {"code": "12016007","description": "查询数据失败"},"data": null}'
+#
+#    dcvp:
+#      "[dcvp.platform.carstatus.search]":
+#        getLastStatus:
+#          # server: https://dcvpgwkf.szlanyou.com/api
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"status":{"code":`"0"`,"description":`"ok"`},"remotestatus":{"code":code,"msg":msg},"data":result.{"alerts":a_jda,"autonomie":ml_r,"conso":fc_t,"dbtype":`"D"`,"eachFuel":`"string"`,"eachMileage":ml_i,"engineState":s_eg,"equipmentID":`"string"`,"kmMaint":mt_m,"kmTotal":ml_t,"lF_TPMS":tp_lf,"lR_TPMS":tp_lr,"lat":lat,"lon":lng,"address":regeo(lat,lng),"nbJourMaintenance":mt_d,"ngtpCreateTime":tm_c,"nivHuile":lv_f,"pepsStatus":peps,"rF_TPMS":tp_rf,"rR_TPMS":tp_rr,"remainingCapacity":b_rc,"sOCRemainMileage":soc}}'
+#          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+#          empty_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+#      "[dcvp.platform.carctrl.ctrl]":
+#        sendVhlCtl:
+#          # server: https://dcvpgwkf.szlanyou.com/api
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"code":code,"description":msg}'
+#          except_error: '{"status": {"code": "12016004","description": "调用接口出错"},"data": null}'
+#          empty_error: '{"status": {"code": "12016007","description": "调用接口失败"},"data": null}'
+#      "[dcvp.platform.cartrack.search]":
+#        getTrackList:
+#          # server: https://dcvpgwkf.szlanyou.com/api
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"statusCode":`"200"`,"statusMsg":`"success"`,"data":result.data[].{"vin":vin,"startTime":beg_time,"endTime":end_time,"eachMileage":to_string(each_mileage),"eachFuel":to_string(numberformat(`"0.##"`,calculate(to_number(each_fuel),`"mul"`,`1000000`))),"driverTime":to_string(steer_time),"avgSpeed":to_string(average_speed),"startLat":start_lat,"startLon":start_lng,"endLat":end_lat,"endLon":end_lng,"startTimestamp":datetostamp(''yyyy-MM-dd HH:mm:ss'',beg_time),"endTimestamp":datetostamp(''yyyy-MM-dd HH:mm:ss'',end_time)}}'
+#          except_error: '{"statusCode": "12016004","statusMsg": "调用接口出错","data": null}'
+#          empty_error: '{"statusCode": "12016007","statusMsg": "调用接口失败","data": null}'
+#      "[dcvp.platform.cartrajectory.search]":
+#        getTrackPoints:
+#          # server: https://dcvpgwkf.szlanyou.com/api
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"statusCode":`"200"`,"statusMsg":`"success"`,"data":result.data[].{"lon":lng,"lat":lat,"tid":datetostamp(''yyyy-MM-dd HH:mm:ss'',tm_c)}}'
+#          except_error: '{"statusCode": "12016004","statusMsg": "调用接口出错","data": null}'
+#          empty_error: '{"statusMsg": "12016007","statusMsg": "调用接口失败","data": null}'
+#      "[dcvp.platform.deploy.deployReq]":
+#        remoteConfig:
+#          # server: https://dcvpgwkf.szlanyou.com/api
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"status": {"code": `"200"`,"description": msg},"eventIds": null}'
+#          except_error: '{"status": {"code": "602","description": "服务器处理失败，批量数据下发未完全下发成功。"},"eventIds": null}'
+#          empty_error: '{"status": {"code": "602","description": "服务器处理失败，批量数据下发未完全下发成功。"},"eventIds": null}'
+#      "[dcvp.platform.ecodriving.drive]":
+#        getecodriver:
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"statusCode": `"200"`,"statusMsg": msg,"data": result.{"averageFuel":to_string(numberformat(`"0.##"`,calculate(to_number(avg_oil_dt),`"mul"`,`1000000`))),"averageMileage":avg_miles_dt,"carbonDisplacement":to_string(numberformat(`"-0.##"`,calculate(to_number(oil_dif_val),`"mul"`,`1000000`))),"economizeFuel":to_string(numberformat(`"-0.##"`,calculate(to_number(oil_thrift_val),`"mul"`,`1000000`))),"fuelPercent":oil_dt_rank,"weekFuel":to_string(numberformat(`"0.##"`,calculate(to_number(oil_dt),`"mul"`,`1000000`))),"weekMileage":miles_dt}}'
+#          except_error: '{"statusCode": "500","statusMsg": msg,"data": null}'
+#          empty_error: '{"statusCode": "500","statusMsg": "未查询到数据！","data": null}'
+#      "[dcvp.platform.ecodriving.sevendays]":
+#        sevendays:
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"statusCode": `"200"`,"statusMsg": msg,"data": result[].{"date":date,"fuelbyday":to_string(numberformat(`"0.##"`,calculate(to_number(oil_d),`"mul"`,`1000000`))),"milebyday":miles_d}}'
+#          except_error: '{"statusCode": "500","statusMsg": msg,"data": null}'
+#          empty_error: '{"statusCode": "500","statusMsg": msg,"data": null}'
+#      "[dcvp.platform.wl.car.sim]":
+#        trackSim:
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"statusCode": `"200"`,"desc": statusMsg,"result": data.similarity,"DisOne":data.disOne,"DisTwo":data.disTwo}'
+#          except_error: '{"statusCode": "500","desc": "调用接口出错","result": null}'
+#          empty_error: '{"statusCode": "500","desc": "调用接口失败","result": null}'
+#      "[dcvp.platform.upgrade.upgradeReq]":
+#        otaUpgrade:
+#          server: http://dcvpgwzh.dfmc.com.cn/api
+#          path:
+#          #          headers: [{appId:'$(appId)'}, {api:'$(api)'}, {nonceStr:'$(nonceStr)'}, {timeStamp:'$(timeStamp)'}, {sign:'$(sign)'}]
+#          data_path: '{"statusCode": `"200"`,"statusMsg": msg}'
+#          except_error: '{"statusCode": "500","statusMsg": msg}'
+#          empty_error: '{"statusCode": "500","statusMsg": msg}'

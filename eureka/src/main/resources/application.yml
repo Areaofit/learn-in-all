@@ -1,0 +1,46 @@
+rpcUrls:
+  rpcSettings:
+    x37:
+      getstatus:
+        getStatus:
+          server: http://bigdata-common-project.uat.pateo.com.cn
+          path: '/usertravel/v2/last/?vin=$(vin)'
+          valid_path: type(data.ngtpCreateTime)=='string'
+          data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": data.{"equipmentID": equipmentID,"ngtpCreateTime": ngtpCreateTime,"nivHuile": nivHuile,"conso": conso,"autonomie": autonomie,"kmTotal": kmTotal,"kmMaint": kmMaint,"nbJourMaintenance": nbJourMaintenance,"dbtype": dbtype,"lon": lon,"lat": lat,"engineState": engineState,"eachMileage": eachMileage,"eachFuel": eachFuel,"address": regeo(lat, lon),"alerts": split(replace(alerts, [[''alertType:alertValue\\||\\d+:'', '''']]),'';''),"rF_TPMS":split(tyreAirPressure,'','')[0], "lF_TPMS":split(tyreAirPressure,'','')[1], "rR_TPMS":split(tyreAirPressure,'','')[2], "lR_TPMS":split(tyreAirPressure,'','')[3] }}'
+          invalid_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+          empty_error: '{"status": {"code": "12016003","description": "该VIN号未查询到车况信息"},"data": null}'
+        contractValid:
+          server: http://mscontract.uat.pateo.com.cn
+          path: '/contract/getContractByVin/$(vin)'
+          valid_path: data.beginTime < '$(getStatus.data.ngtpCreateTime)' && '$(getStatus.data.ngtpCreateTime)' < data.endTime
+          invalid_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+          empty_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+        getLastDM:
+          server: http://msdevice.uat.pateo.com.cn
+          path: '/device/vehicle/getLastDataMingingInfo/$(vin)/1'
+          data_path: '{"data": {"nivHuile": nivHuile,"autonomie": autonomie,"kmTotal": kmTotal,"kmMaint": kmMaint,"tyreAirPressure": tyreAirPressure}}'
+          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+    gjs11:
+      getstatus:
+        getLastStatus:
+          server: http://bigdata-gj-project.paas.pateo.com.cn #/usertravel/v2/last?vin=LWSRCB5K09A000047
+          path: '/usertravel/v2/last?vin=$(vin)'
+          data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": data.{"RRTempHigh": RRTempHigh,"frontRight": frontRight,"altitudeMtr": altitudeMtr,"distToEmptyPowerKm": distToEmptyPowerKm,"FRTempHigh": FRTempHigh,"tailgate": tailgate,"type": type,"rearRight": rearRight,"FLTempHigh": FLTempHigh,"VCUBattChrgStatus": VCUBattChrgStatus,"chargingStatus": chargingStatus,"vin": vin,"RLPressureWarning": RLPressureWarning,"FLPressureWarning": FLPressureWarning,"ABS_AbsFlgFlt": ABS_AbsFlgFlt,"longitude": longitude,"stateOfCharge": stateOfCharge,"vehicleSpeed": vehicleSpeed,"odometer": odometer,"SystemErr": SystemErr,"RLTempHigh": RLTempHigh,"FLTireTemp": FLTireTemp,"gnssSpeedKmph": gnssSpeedKmph,"gatherTime": gatherTime,"EPB_Warning_Indication_Request": EPB_Warning_Indication_Request,"RRTireTemp": RRTireTemp,"reportTime": reportTime,"status": status,"rearLeft": rearLeft,"internal": internal,"averageFuelConsumption": averageFuelConsumption,"creationTime": creationTime,"TPMS_LR_Pressure": TPMS_LR_Pressure,"VCUBrkErr": VCUBrkErr,"latitude": latitude,"address": regeo(latitude, longitude),"frontLeft": frontLeft,"VCUPwrBattCutOff": VCUPwrBattCutOff,"odometerValue": odometerValue,"RLTireTemp": RLTireTemp,"EPB_Audible_Warning_Request": EPB_Audible_Warning_Request,"MCUElecMotOverTErr": MCUElecMotOverTErr,"EPS_EpasFailed": EPS_EpasFailed,"FRTireTemp": FRTireTemp,"temperature": temperature,"SystemWarning": SystemWarning,"fixtime": fixtime,"projectID": projectID,"TPMS_LF_Pressure": TPMS_LF_Pressure,"timer1": timer1,"heading": heading,"RRPressureWarning": RRPressureWarning,"TPMS_RR_Pressure": TPMS_RR_Pressure,"EPB_Display_Message_Request": EPB_Display_Message_Request,"FRPressureWarning": FRPressureWarning,"VCUElecMotErr": VCUElecMotErr,"positionId": positionId,"VCUsysOverT": VCUsysOverT,"VCUPwrBattFlt": VCUPwrBattFlt,"BMSInsulationSts": BMSInsulationSts,"TPMS_RF_Pressure": TPMS_RF_Pressure,"keyPosition": keyPosition,"gatherTime_alertinfo": gatherTime_alertinfo}}'
+          except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+          empty_error: '{"status": {"code": "12016007","description": "查询用户合同有效期失败"},"data": null}'
+        getecodrivng:
+          getecodrivng:
+            server: http://bigdata-common-project.bdperf.pateo.com.cn #/ecodriving/getecodrivng?vin=LWSRCB5K09A000047
+            path: '/ecodriving/getecodrivng?vin=$(vin)'
+            data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": {"averageMileage":data.averageMileage,"economizeFuel":calculate(to_number(data.economizeFuel), `"mul"`, ifelse(substring(`"$(vin)"`,`6`,`8`)==`"G2"`, `0.46398`, `0.43903`))}}'
+            except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+            empty_error: '{"status": {"code": "12016007","description": "查询S11环保驾驶数据失败"},"data": null}'
+        getdrivercore:
+          getdrivercore:
+            server: http://bigdata-gj-project.perf.pateo.com.cn #/usertravel/v2/drivercore?vin=LWSRCB5K09A000047
+            path: '/usertravel/v2/drivercore?vin=$(vin)'
+            data_path: '{"status": {"code": `"0"`,"description": `"ok"`},"data": data}'
+            except_error: '{"status": {"code": "12016004","description": "调用数据接口出错"},"data": null}'
+            empty_error: '{"status": {"code": "12016007","description": "查询数据失败"},"data": null}'
